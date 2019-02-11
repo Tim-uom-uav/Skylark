@@ -1,0 +1,377 @@
+	/*
+	//Get the map square ref from the file name
+	int refStart = name.find_last_of('\\') + 1;
+	std::string gridRef = name;// name.substr(refStart, name.find_last_of('.') - refStart);
+	if (gridRef.size() != 2) {
+		std::cout << "ERROR: GRIDREF NOT 2 CHARS" << std::endl;
+		return 0;
+	}
+	//work out the major grid square cartesian position
+	float majorGridNum = float(1 + (int(gridRef[0]) - int('A')));
+	if (int(gridRef[0]) > int('I')) { //BECUASE OS DOESN'T LIKE THE LETTER 'I'! I KNOW, RIGHT?!
+		majorGridNum--;
+	}
+	int majorY = int(ceil((majorGridNum + 1) / 5));
+	glm::vec3 localOrigin(((majorGridNum - (majorY - 1) * 5)-3)*5, float(4-majorY)*5, 0); //The correct 500km square...
+	//Now to work out the correct 100 km square!
+	float minorGridNum = float(1 + (int(gridRef[1]) - int('A')));
+	if (int(gridRef[0]) > int('I')) { //BECUASE OS DOESN'T LIKE THE LETTER 'I'! I KNOW, RIGHT?!
+		minorGridNum--;
+	}
+	int minorY = int(ceil((minorGridNum + 1) / 5));
+	localOrigin += glm::vec3((minorGridNum - (minorY - 1) * 5), float(5-minorY), 0);
+	localOrigin *= 100000.0f; //they're 100km squares, we work in metres. Like good engineers.
+	*/
+
+	
+int TiledMap::loadOSMapFromFolder(std::string folderPath) {
+	std::cout << "Loading map tiles...";
+	int i = 0;
+	for (auto & path : std::experimental::filesystem::directory_iterator(folderPath)) {
+		MapTile newTile;
+		i++;
+		if (newTile.loadTile(path.path().string(), glm::vec3(0, 0, 0))) {
+			tiles.push_back(newTile);
+		}
+	}
+	std::cout << "done! Loaded " << tiles.size() << " tiles" << std::endl;
+	return 1;
+}
+
+
+
+int stuff() {
+	//Create 2d vector called "speeds2d"
+	std::vector<int> speeds(613);
+	std::vector<std::vector<int> > speeds2d(799, speeds);
+
+	//create file path from folder destination and store speed values into 2d vector
+	int level = 0;
+	//get_Speed_Matrix("INSERT FILE PATH HERE", speeds2d, level);
+	//The speed values are returned into "speeds2d"
+
+
+
+	//print out "speeds2d" vector
+	/*for (int yPosition = 0; yPosition <= 612; yPosition++) {
+	for (int xPosition = 0; xPosition <= 798; xPosition++) {
+	std::cout << speeds2d[xPosition][yPosition] << " ";
+	}
+	}*/
+
+	/*gil::rgb8_image_t img;
+	gil::jpeg_read_image("C:/Users/Yahya/source/repos/ConsoleApplication2/wind velocity vs pressure/2018080106.f000.250.skntnonenonenonenone.eur.gfs003.jpg", img);
+	int xPosition = 7;
+	int yPosition = 44;
+	std::cout << "Read complete, got an image " << img.width() << " by " << img.height() << " pixels." << std::endl;
+	gil::rgb8_pixel_t px = *const_view(img).at(xPosition, yPosition);
+	std::cout << "The pixel at " << xPosition << ", " << yPosition << " is " << (int)px[0] << ", " << (int)px[1] << ", " << (int)px[2] << std::endl;
+	std::cout << "velocity is " << get_Speed((int)px[0], (int)px[1], (int)px[2]) << std::endl;*/
+
+	std::string y;
+	std::getline(std::cin, y);
+	return 0;
+}
+
+
+/*
+class colours {
+public:
+	int violet[3] = { 138,0,139 };
+	int blue_Violet[3] = { 145,44,238 };
+	int amethyst[3] = { 137,104,205 };
+	int aqua[3] = { 0,238,238 };
+	int deep_Blue_Sky[3] = { 0,178,238 };
+	int dodger_Blue[3] = { 30,144,255 };
+	int dark_Cerulean[3] = { 16,78,139 };
+	int green[3] = { 0,139,0 };
+	int lime[3] = { 0,205,0 };
+	int chartreuse[3] = { 127,255,0 };
+	int chartreuse_Yellow[3] = { 238,238,0 };
+	int gold[3] = { 254,215,0 };
+	int mango_Tango[3] = { 205,133,0 };
+	int Silver[3] = { 196,196,196 };
+};
+**/
+
+	/*
+	boost::asio::ip::tcp::iostream stream("public-api.adsbexchange.com", "http");
+	stream << "GET /VirtualRadar/AircraftList.json?lat=52.433638&lng=1.508113&fDstL=0&fDstU=100 HTTP/1.1\r\n";
+	stream << "Host: public-api.adsbexchange.com\r\n";
+	stream << "Accept: * / *\r\n";
+	stream << "Connection: close\r\n\r\n";
+	stream.flush();
+	std::cout << stream.rdbuf();
+	*/
+
+	boost::system::error_code ec;
+
+	// what we need
+	boost::asio::io_service svc;
+	boost::asio::ssl::context ctx(boost::asio::ssl::context::method::sslv23_client);
+	boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssock(svc, ctx);
+	
+	ssock.lowest_layer().connect({ {}, 8087 }); // http://localhost:8087 for test
+	ssock.handshake(boost::asio::ssl::stream_base::handshake_type::client);
+	/**
+	// send request
+	std::string request("GET / HTTP/1.1\r\n\r\n");
+	boost::asio::write(ssock, boost::asio::buffer(request));
+
+	// read response
+	std::string response;
+
+	do {
+		char buf[1024];
+		size_t bytes_transferred = ssock.read_some(boost::asio::buffer(buf), ec);
+		if (!ec) response.append(buf, buf + bytes_transferred);
+	} while (!ec);
+
+	// print and exit
+	std::cout << "Response received: '" << response << "'\n";
+	*/
+
+	/*
+std::vector<int> TiledMap::findTilesInBoundingBox(glm::vec2 topLeft, glm::vec2 bottomRight) {
+	std::vector <int> results;
+	for (int i = 0; i < tiles.size(); i++) {
+		MapTile thisTile = tiles[i];
+		bool result = false;
+		// test the bottom left corner of the tiles
+		if (thisTile.getPos().x > topLeft.x && thisTile.getPos().y > bottomRight.y) {
+			if (thisTile.getPos().x < bottomRight.x && thisTile.getPos().y < topLeft.y) {
+				result = true;
+			}
+		}
+		// test the top left corner of the tiles
+		if (!result) {
+			if (thisTile.getPos().x > topLeft.x && thisTile.getPos().y+thisTile.getHeight() > bottomRight.y) {
+				if (thisTile.getPos().x < bottomRight.x && thisTile.getPos().y+thisTile.getHeight() < topLeft.y) {
+					result = true;
+				}
+			}
+		}
+		// test the bottom right corner of the tiles
+		if (!result) {
+			if (thisTile.getPos().x+thisTile.getWidth() > topLeft.x && thisTile.getPos().y > bottomRight.y) {
+				if (thisTile.getPos().x+thisTile.getWidth() < bottomRight.x && thisTile.getPos().y < topLeft.y) {
+					result = true;
+				}
+			}
+		}
+		// test the top right corner of the tiles
+		if (!result) {
+			if (thisTile.getPos().x + thisTile.getWidth() > topLeft.x && thisTile.getPos().y+thisTile.getHeight() > bottomRight.y) {
+				if (thisTile.getPos().x + thisTile.getWidth() < bottomRight.x && thisTile.getPos().y+thisTile.getHeight() < topLeft.y) {
+					result = true;
+				}
+			}
+		}
+		//test to see if the screen centre is contained within this tile...
+		if (!result) {
+			glm::vec2 screenCentre = glm::vec2((topLeft.x+bottomRight.x)/2, (topLeft.y+bottomRight.y)/2);
+			if (screenCentre.x > thisTile.getPos().x && screenCentre.x < thisTile.getPos().x + thisTile.getWidth()) {
+				if (screenCentre.y > thisTile.getPos().y && screenCentre.y < thisTile.getPos().y + thisTile.getHeight()) {
+					result = true;
+				}
+			}
+		}
+		if (result) {
+			tiles[i].requestLoadTexture();
+		}
+		else {
+			tiles[i].requestUnloadTexture();
+		}
+	}
+	return results;
+}
+*/
+		//if (foundChunk < g_terrain.chunkList.size() && g_terrain.chunkList[foundChunk].getName() == editingChunk.getName()) {
+		/*}
+		else { // It's moved!!
+			for (unsigned int i = 0; i < g_terrain.chunkList.size(); i++) {
+				if (g_terrain.chunkList[i].getName() == editingChunk.getName()) {
+					g_terrain.chunkList[i] = editingChunk;
+					break;
+				}
+			}
+		}
+		*/
+
+			/*
+	//Debug Check
+	std::cout << std::endl << "***NEW GRID LIST***" << std::endl;
+	for (int i = 0; i < gridSquareLists.size(); i++) {
+		std::cout << "*NEW GROUP*" << std::endl;
+		for (int j = 0; j < gridSquareLists[i].size(); j++) {
+			std::cout << gridSquareLists[i][j] << std::endl;
+		}
+	}
+	std::cout << "***END***" << std::endl << std::endl;
+	*/
+
+	/*
+		//Otherwise
+		TerrainChunk newChunk;
+		newChunk.setName(tileName); //Set the name so we won't interrupt async loading, and it knows what to load
+		chunkList.push_back(newChunk);
+		if (chunkList[chunkList.size() - 1].startAsyncLoadFile()) {
+			numTerrainChunksLoading++;
+		}
+		/*chunkList[chunkList.size() - 1].threadHandle = CreateThread(0, 0, TerrainChunk::asyncLoadFile, &(chunkList[chunkList.size() - 1]), 0, &chunkList[chunkList.size() - 1].threadID);
+		if (chunkList[chunkList.size() - 1].threadHandle == NULL) {
+			std::cout << "ERROR: FAILED TO CREATE NEW THREAD TO LOAD TERRAIN CHUNK" << std::endl;
+			chunkList.erase(chunkList.end()); ///TEST ME PLZ
+			return 0;
+		}
+		else {
+			numTerrainChunksLoading++;
+			//else {
+				//numTerrainChunksLoading--;
+			//}
+		}
+		*/
+
+		
+	/*
+	glm::vec2 northWestCorner = glm::vec2(flightWindowCamera.getPosition().x - 50000, flightWindowCamera.getPosition().y + 50000);
+	glm::vec2 southEastCorner = glm::vec2(flightWindowCamera.getPosition().x + 50000, flightWindowCamera.getPosition().y - 50000);
+	std::vector<std::string> requiredTerrainChunks;
+	for (float x = northWestCorner.x; x < southEastCorner.x; x += 10000) {
+		for (float y = southEastCorner.y; y < northWestCorner.y; y += 10000) {
+			glm::vec2 pos = glm::vec2(x, y);
+			std::string gridSquare = util_EastingNorthingToGridLetter(pos, true);
+			requiredTerrainChunks.emplace_back(gridSquare);
+		}
+	}
+	//Now split it up into separate lists for each 100km square (trust me, this is faster than the alternative)
+	std::vector<std::vector<std::string>> gridSquareLists;
+	for (unsigned int i = 0; i < requiredTerrainChunks.size(); i++) {
+		//If this is the first element to add, just append it
+		if (gridSquareLists.size() == 0) {
+			std::vector<std::string> newGroup;
+			newGroup.emplace_back(requiredTerrainChunks[i]);
+			gridSquareLists.emplace_back(newGroup);
+		}
+		else {
+			//Otherwise, hunt through the list to find if any of them have the same area code
+			bool appended = false;
+			for (unsigned int j = 0; j < gridSquareLists.size(); j++) {
+				if (gridSquareLists[j].size() > 0) {
+					if (gridSquareLists[j][0].substr(0, 2) == requiredTerrainChunks[i].substr(0, 2)) { //matching area code!
+						gridSquareLists[j].emplace_back(requiredTerrainChunks[i]);
+						appended = true;
+						break; //time to try the next required terrain chunk
+					}
+				}
+				else {
+					std::cout << "ERROR: GRID SQUARE LIST SIZE OF ZERO" << std::endl;
+				}
+			}
+			if (!appended) { //Yes, I know the break should *technically* stop us getting here, but better safe than sorry
+				std::vector<std::string> newGroup;
+				newGroup.emplace_back(requiredTerrainChunks[i]);
+				gridSquareLists.emplace_back(newGroup);
+			}
+		}
+	}
+	for (unsigned int i = 0; i < gridSquareLists.size(); i++) {
+		for (unsigned int j = 0; j < g_terrain.size(); j++) {
+			if (gridSquareLists[i].size() > 0 && gridSquareLists[i][0].substr(0, 2) == g_terrain[j].getName()) {
+				g_terrain[j].setChunkedTerrainList(gridSquareLists[i]);
+				break;
+			}
+		}
+	}
+	*/
+
+	
+int TerrainSuperchunk::load(std::string tileName) {
+	if (tileName != "" && tileName.length() == 4) {
+		for (int i = 0; i < chunkList.size(); i++) {
+			if (chunkList[i].getName() == tileName) {
+				if (!chunkList[i].isLoading && !chunkList[i].containsLoadedChunk()){
+					if (chunkList[i].startAsyncLoadFile() == 1) {
+						numTerrainChunksLoading++;
+						return 1; //we done!
+					}
+					else {
+						return 0;
+					}
+				}
+			}
+		}
+	}
+	else {
+		return 0;
+	}
+	return 1;
+}
+
+
+int TerrainSuperchunk::setChunkedTerrainList(std::vector<std::string> requiredChunkList) {
+	//First dump all the ones we don't need...
+	for (int i = 0; i < chunkList.size(); i++) {
+		bool needed = false;
+		for (int j = 0; j < requiredChunkList.size(); j++) {
+			if (chunkList[i].getName() == requiredChunkList[j]) {
+				needed = true;
+				break;
+			}
+		}
+		if (!needed) {
+			if (!chunkList[i].isLoading) {
+				//std::cout << "Removing terrain chunk " << chunkList[i].getName() << "...";
+				if (chunkList[i].unload()) {
+					//std::cout << "done!" << std::endl;
+				}
+				else {
+					std::cout << "FAILED TO REMOVE CHUNK" << std::endl;
+				}
+			}
+		}
+	}
+	//Now load what we need! The load function prevents us from re-loading current or invalid ones.
+	for (int i = 0; i < requiredChunkList.size() && numTerrainChunksLoading <= 4; i++) {
+		load(requiredChunkList[i]);
+	}
+	return 1;
+}
+
+bool TerrainChunk::containsLoadedChunk() {
+	return containLoadedChunk;
+}
+int TerrainChunk::setLoadedChunkState(bool newState) {
+	containLoadedChunk = newState;
+	return 1;
+}
+
+if (chunkList[i].threadHandle != NULL) {
+			DWORD result = WaitForSingleObject(chunkList[i].threadHandle, 0);
+			if (result == WAIT_OBJECT_0) { //if it has finished...
+				if (chunkList[i].getName().length() == 4) {
+					if (chunkList[i].genBuffers()) {
+						notifyFinishedLoadingOperation();
+						chunkList[i].threadHandle = NULL;
+						chunkList[i].threadID = -1;
+						//std::cout << "Detected " << chunkList[i].getName() << " finished!" << std::endl;
+						chunkList[i].isLoading = false;
+						chunkList[i].setLoadedChunkState(true);
+					}
+					else {
+						std::cout << "DRAW ERROR: Chunk '" << chunkList[i].getName() << "' failed to gen buffers. Removing." << std::endl;
+						//chunkList.erase(chunkList.begin() + i);
+						notifyFinishedLoadingOperation();
+						chunkList[i].isLoading = false;
+						chunkList[i].setLoadedChunkState(false);
+					}
+				}
+				else {
+					std::cout << "DRAW ERROR: Removing defective chunk '" << chunkList[i].getName() << "'. Len = " << chunkList[i].getName().length() << std::endl;
+					notifyFinishedLoadingOperation();
+					chunkList[i].isLoading = false;
+					chunkList[i].setLoadedChunkState(false);
+				}
+			}
+		}
+		else {
